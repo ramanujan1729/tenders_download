@@ -1,0 +1,58 @@
+api:
+  base_url: "https://ezamowienia.gov.pl/mp-readmodels"
+  endpoints:
+    search_tenders: "/api/Search/SearchTenders"
+    documents: "/api/Search/GetTenderDocuments"
+    documents_tender_param: "tenderId"
+    download: "/api/Tender/DownloadDocument/{tenderId}/{documentId}"
+    tender_details: "/api/Search/GetTender"
+    tender_details_tender_param: "id"
+  rate_limit: 10
+  timeout: 30
+
+paths:
+  tenders_dir: "data/kosztorys-tenders"     
+  attachments_subdir: "attachments"
+  output_dir: "data/output"
+  raw_tenders_dir: "tender_data"  # Folder for province-level tender dumps (JSON / JSON Lines)
+
+filtering:
+  patterns:
+    kosztorys: "kosztorys[a-ząćęłńóśźż]*"
+  output_file: "filtered_documents.txt"
+
+tender_fetch:
+  get_all: true                   # When true, ignore the filters block below
+  filters:
+    orderType: "Works"
+    noticeType: "ContractNotice"
+    isTenderAmountBelowEU: "false"
+    cpvCode: "45"
+    SortingColumnName: "PublicationDate"
+    SortingDirection: "DESC"
+  pagination:
+    start_page: 1
+    end_page: 200
+    page_size: 50
+    delay_seconds: 0.5
+    province_pause_seconds: 2.5
+    request_timeout: 30
+  province_param: "organizationProvince"
+  provinces:
+    - "dolnośląskie"
+    - "kujawsko-pomorskie"
+    - "lubelskie"
+    - "lubuskie"
+    - "łódzkie"
+    - "małopolskie"
+    - "mazowieckie"
+    - "opolskie"
+    - "podlaskie"
+    - "podkarpackie"
+    - "pomorskie"
+    - "świętokrzyskie"
+    - "śląskie"
+    - "warmińsko-mazurskie"
+    - "wielkopolskie"
+    - "zachodniopomorskie"
+
